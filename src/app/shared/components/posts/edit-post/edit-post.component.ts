@@ -29,6 +29,7 @@ export class EditPostComponent extends PostComponentBase implements OnInit {
         : this.participantService.currentUserParticipant$;
     posts$ = this.postService.items$;
     postTemplate: number;
+    useStartDate: boolean = false;
     latestPost$ = this.posts$.pipe(map(posts => posts && posts[0]));
     showSettings$ = this.currentUser$.pipe(
         map(user => user?.roles.administrator && this.post?.participant?._id === user?._id)
@@ -38,7 +39,10 @@ export class EditPostComponent extends PostComponentBase implements OnInit {
     postForm = new FormGroup({
         content: new FormControl(''),
         postFeatured: new FormControl(''),
-        postTemplate: new FormControl('')
+        postTemplate: new FormControl(''),
+        postStartDate: new FormControl(''),
+        postStartTime: new FormControl(''),
+        postEndDate: new FormControl('')
     });
     // comments$ = this.commentService.query.selectAll({ filterBy: comment => this.post._id === comment.postId });
 
@@ -84,6 +88,10 @@ export class EditPostComponent extends PostComponentBase implements OnInit {
 
     close() {
         this.modalController.dismiss();
+    }
+
+    toggleStartDate(){
+        this.useStartDate = !this.useStartDate;
     }
 
     async openList(title: string, participants: ParticipantPartial[]) {
@@ -154,7 +162,13 @@ export class EditPostComponent extends PostComponentBase implements OnInit {
         this.post.postTemplate = this.postForm.controls.postTemplate.value || 0;
         this.post.featuredPost = !!this.postForm.controls.postFeatured.value;
         this.post.tagsLocation = this.post.tagsLocation || 0;
-
+        this.post.postStartDate = this.postForm.value.postStartDate;
+        this.post.postEndDate = this.postForm.value.postEndDate;
+        this.post.postStartTime = this.postForm.value.postStartTime;
+          if(this.post.postStartDate){
+              this.post.hasStartDate = true;
+          }
+        console.log("Inside postForm",this.post);
         // TODO: CORDOVA: UPLOAD PHOTOS
         const payload: Partial<Post> = {
             _id: this.post._id,

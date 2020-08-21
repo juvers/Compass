@@ -27,4 +27,8 @@ export class Post {
     participant: Participant;
     postContentUpdatedAt: string;
     postUpdatedAt: string;
+    postStartDate: string;
+    postEndDate: string;
+    postStartTime: string;
+    hasStartDate: boolean;
 }

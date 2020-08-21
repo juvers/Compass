@@ -15,3 +15,11 @@
         --highlight-background: var(--ion-color-tertiary) !important;
     }
 }
+
+ion-toggle {
+  --background: #000;
+  --background-checked: #7a49a5;
+
+  --handle-background: #7a49a5;
+  --handle-background-checked: #000;
+}
